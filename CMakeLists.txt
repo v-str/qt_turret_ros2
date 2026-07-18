@@ -49,7 +49,6 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
-        mainwindow.ui
         src/ros/RosHandler.h
         src/ros/RosHandler.cpp
         src/ros/QtRosWorker.h

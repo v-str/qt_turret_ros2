@@ -2,12 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
+#include <QImage>
+#include <QThread>
+#include "camera/CameraGrabber.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,7 +14,16 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+public slots:
+    void onFrameCaptured(const QImage &frame);
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private:
-    Ui::MainWindow *ui;
+    QImage m_lastFrame;
+    CameraGrabber *m_cameraGrabber;
+    QThread *m_cameraThread;
 };
+
 #endif // MAINWINDOW_H
