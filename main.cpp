@@ -2,11 +2,14 @@
 #include "ros/QtRosWorker.h"
 
 #include <QApplication>
+#include <QFont>
 #include <QThread>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QFont appFont("Source Code Pro", 14, QFont::Light);
+    a.setFont(appFont);
 
     QThread ros_thread;
     QtRosWorker ros_worker;

@@ -48,10 +48,9 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 8
-        text: "Ctrl+0 — перевод в режим ожидания"
+        text: "Ctrl+0 — откл. боевой режим\nCtrl+L — вкл. целеуказатель"
         color: "red"
         font.pixelSize: 14
-        font.bold: true
         visible: combatToggle.checked
     }
 
@@ -94,6 +93,8 @@ Item {
                     Layout.preferredWidth: 150
                     Layout.minimumWidth: 150
                     Layout.maximumWidth: 150
+                    frameColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
+                    textColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
                     Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
                     onClicked: turretWidget.sendCommand(0)
                 }
@@ -105,6 +106,8 @@ Item {
                     Layout.preferredWidth: 150
                     Layout.minimumWidth: 150
                     Layout.maximumWidth: 150
+                    frameColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
+                    textColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
                     Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
                 }
 
@@ -115,6 +118,8 @@ Item {
                     Layout.preferredWidth: 150
                     Layout.minimumWidth: 150
                     Layout.maximumWidth: 150
+                    frameColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
+                    textColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
                     Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
                     onClicked: turretWidget.sendCommand(2)
                 }
@@ -143,6 +148,7 @@ Item {
                 AppToggle {
                     id: combatToggle
                     Layout.alignment: Qt.AlignRight
+                    activeColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
                     onCheckedChanged: {
                         if (checked) {
                             flashAnim.start()
@@ -207,9 +213,10 @@ Item {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.leftMargin: 10
-        anchors.bottomMargin: 6
-        width: 400
-        height: 117
+        anchors.bottomMargin: 1
+        width: 380
+        height: 100
+        accentColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
         z: 1000
     }
 

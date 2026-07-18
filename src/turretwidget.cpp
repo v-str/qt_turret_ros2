@@ -71,12 +71,11 @@ void TurretWidget::sendAimDelta(float dx, float dy)
     m_panPos = qBound(-1.0f, m_panPos + pan_vel, 1.0f);
     m_tiltPos = qBound(-1.0f, m_tiltPos + tilt_vel, 1.0f);
     emit aimDeltaReceived(m_panPos, m_tiltPos, pan_vel, tilt_vel, m_laserOn);
-    emit logRequested(
-        QString("Прицеливание: pan=%1, tilt=%2, pan_vel=%3, tilt_vel=%4")
-            .arg(m_panPos, 0, 'f', 3)
-            .arg(m_tiltPos, 0, 'f', 3)
-            .arg(pan_vel, 0, 'f', 3)
-            .arg(tilt_vel, 0, 'f', 3));
+    emit logRequested(QString("pan=%1, tilt=%2, pan_vel=%3, tilt_vel=%4")
+                          .arg(m_panPos, 0, 'f', 3)
+                          .arg(m_tiltPos, 0, 'f', 3)
+                          .arg(pan_vel, 0, 'f', 3)
+                          .arg(tilt_vel, 0, 'f', 3));
 }
 
 void TurretWidget::toggleLaser()

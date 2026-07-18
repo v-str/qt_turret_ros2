@@ -8,6 +8,7 @@ Item {
     property string text: ""
     property bool checked: false
     property bool isEnabled: true
+    property color activeColor: SpaceMill.spaceSuccess
 
     signal toggled(bool checked)
 
@@ -18,7 +19,7 @@ Item {
         color: SpaceMill.spaceElementAlpha
         border.width: 1
         border.color: root.isEnabled
-            ? (root.checked ? SpaceMill.spaceSuccess : SpaceMill.spaceTextMuted)
+            ? (root.checked ? root.activeColor : SpaceMill.spaceTextMuted)
             : SpaceMill.spaceTextMuted
     }
 

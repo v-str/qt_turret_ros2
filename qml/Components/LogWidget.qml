@@ -5,6 +5,7 @@ import QtQuick.Layouts
 Item {
     property ListModel logModel: ListModel {}
     property int logCount: 0
+    property color accentColor: SpaceMill.spaceSuccess
 
     function appendLog(msg) {
         logModel.append({ text: msg })
@@ -28,8 +29,8 @@ Item {
         spacing: 4
 
         Label {
-            text: "Журнал операций"
-            color: SpaceMill.spaceSuccess
+            text: "Лог"
+            color: root.accentColor
             font.pixelSize: 13
         }
 
