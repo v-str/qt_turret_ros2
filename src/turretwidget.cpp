@@ -5,6 +5,7 @@
 #include <QQmlContext>
 #include <QVBoxLayout>
 #include <QUrl>
+#include <QCursor>
 
 ImageProvider::ImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Image)
@@ -49,12 +50,18 @@ TurretWidget::TurretWidget(QWidget *parent)
     auto *ctx = quickWidget->engine()->rootContext();
     ctx->setContextProperty("imageProvider", m_imageProvider);
     ctx->setContextProperty("SpaceMill", theme::make());
+    ctx->setContextProperty("turretWidget", this);
 
     quickWidget->setSource(QUrl("qrc:/qml/turretwidget.qml"));
 
     auto *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(quickWidget);
+}
+
+void TurretWidget::warpMouse(int x, int y)
+{
+    QCursor::setPos(mapToGlobal(QPoint(x, y)));
 }
 
 TurretWidget::~TurretWidget()

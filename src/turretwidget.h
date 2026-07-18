@@ -5,6 +5,7 @@
 #include <QImage>
 #include <QMutex>
 #include <QQuickImageProvider>
+#include <QCursor>
 
 class ImageProvider : public QQuickImageProvider
 {
@@ -38,6 +39,8 @@ public:
     ~TurretWidget() override;
 
     void setFrame(const QImage &frame);
+
+    Q_INVOKABLE void warpMouse(int x, int y);
 
 private:
     ImageProvider *m_imageProvider = nullptr;
