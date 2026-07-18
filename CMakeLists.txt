@@ -25,8 +25,8 @@ list(APPEND CMAKE_PREFIX_PATH
 set(ENV{AMENT_PREFIX_PATH} "/opt/ros/lyrical:$ENV{HOME}/Ros2/ros2_ws/install")
 
 # Qt — графический интерфейс
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets QuickWidgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets QuickWidgets)
 
 # Python — для скриптов ament (cmake-помощники ROS2)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
@@ -58,7 +58,6 @@ set(PROJECT_SOURCES
         src/camera/CameraGrabber.cpp
         src/turretwidget.h
         src/turretwidget.cpp
-        src/turretwidget.ui
         resources.qrc
 )
 
@@ -78,6 +77,7 @@ endif()
 target_include_directories(qt_turret_ros2 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(qt_turret_ros2 PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::QuickWidgets
     ${OpenCV_LIBS}
     rclcpp::rclcpp
     proto_turret_interfaces::proto_turret_interfaces

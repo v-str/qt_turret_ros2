@@ -1,39 +1,59 @@
 #include "turretwidget.h"
-#include "ui_turretwidget.h"
+#include <QQuickWidget>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QVBoxLayout>
+#include <QUrl>
+
+ImageProvider::ImageProvider()
+    : QQuickImageProvider(QQuickImageProvider::Image)
+{
+}
+
+void ImageProvider::setFrame(const QImage &frame)
+{
+    QMutexLocker lock(&m_mutex);
+    m_frame = frame;
+    m_counter++;
+    emit counterChanged();
+}
+
+QImage ImageProvider::requestImage(const QString &, QSize *size, const QSize &)
+{
+    QMutexLocker lock(&m_mutex);
+    if (m_frame.isNull()) {
+        if (size)
+            *size = QSize(1, 1);
+        return QImage(1, 1, QImage::Format_ARGB32);
+    }
+    if (size)
+        *size = m_frame.size();
+    return m_frame;
+}
 
 TurretWidget::TurretWidget(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::turretWidget)
 {
-    ui->setupUi(this);
-    ui->crosshair->setAttribute(Qt::WA_TransparentForMouseEvents);
+    m_imageProvider = new ImageProvider();
+
+    auto *quickWidget = new QQuickWidget(this);
+    quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    quickWidget->engine()->addImageProvider("turret", m_imageProvider);
+    quickWidget->engine()->rootContext()->setContextProperty("imageProvider", m_imageProvider);
+
+    quickWidget->setSource(QUrl("qrc:/qml/turretwidget.qml"));
+
+    auto *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(quickWidget);
 }
 
 TurretWidget::~TurretWidget()
 {
-    delete ui;
+    delete m_imageProvider;
 }
 
 void TurretWidget::setFrame(const QImage &frame)
 {
-    m_frame = frame;
-    update();
-}
-
-void TurretWidget::paintEvent(QPaintEvent *)
-{
-    QPainter p(this);
-    p.setRenderHint(QPainter::SmoothPixmapTransform);
-
-    if (m_frame.isNull()) {
-        p.fillRect(rect(), Qt::black);
-        return;
-    }
-
-    auto scaled = m_frame.scaled(
-        size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-    int x = (width() - scaled.width()) / 2;
-    int y = (height() - scaled.height()) / 2;
-    p.drawImage(x, y, scaled);
+    m_imageProvider->setFrame(frame);
 }

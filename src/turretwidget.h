@@ -3,9 +3,30 @@
 
 #include <QWidget>
 #include <QImage>
-#include <QPainter>
+#include <QMutex>
+#include <QQuickImageProvider>
 
-namespace Ui { class turretWidget; }
+class ImageProvider : public QQuickImageProvider
+{
+    Q_OBJECT
+    Q_PROPERTY(int counter READ counter NOTIFY counterChanged)
+
+public:
+    ImageProvider();
+
+    void setFrame(const QImage &frame);
+    int counter() const { return m_counter; }
+
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
+
+signals:
+    void counterChanged();
+
+private:
+    QImage m_frame;
+    QMutex m_mutex;
+    int m_counter = 0;
+};
 
 class TurretWidget : public QWidget
 {
@@ -14,14 +35,11 @@ class TurretWidget : public QWidget
 public:
     explicit TurretWidget(QWidget *parent = nullptr);
     ~TurretWidget() override;
+
     void setFrame(const QImage &frame);
 
-protected:
-    void paintEvent(QPaintEvent *event) override;
-
 private:
-    QImage m_frame;
-    Ui::turretWidget *ui;
+    ImageProvider *m_imageProvider = nullptr;
 };
 
-#endif // TURRETWIDGET_H
+#endif

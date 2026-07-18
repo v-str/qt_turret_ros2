@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_cameraGrabber, &CameraGrabber::frameCaptured,
             this, &MainWindow::onFrameCaptured);
-    connect(m_cameraThread, &QThread::started, this, [this]() {
+    connect(m_cameraThread, &QThread::started, m_cameraGrabber, [this]() {
         m_cameraGrabber->start();
     });
 
@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    m_cameraGrabber->stop();
+    QMetaObject::invokeMethod(m_cameraGrabber, "stop", Qt::BlockingQueuedConnection);
     m_cameraThread->quit();
     m_cameraThread->wait();
     delete m_cameraGrabber;

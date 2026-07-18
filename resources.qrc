@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>images/crosshair.png</file>
+        <file>qml/turretwidget.qml</file>
     </qresource>
 </RCC>
