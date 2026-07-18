@@ -149,7 +149,7 @@ Item {
                     id: combatToggle
                     Layout.alignment: Qt.AlignRight
                     activeColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
-                    blocked: turretWidget.combatBlocked
+                    blocked: turretWidget ? turretWidget.combatBlocked : false
                     onBlockedClicked: turretWidget.logRequested(
                         "Перевод в боевой режим невозможен: " + turretWidget.combatBlockedReason, 2)
                     onCheckedChanged: {
