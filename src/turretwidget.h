@@ -33,6 +33,7 @@ private:
 class TurretWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool laserOn READ laserOn NOTIFY laserOnChanged)
 
 public:
     explicit TurretWidget(QWidget *parent = nullptr);
@@ -40,17 +41,25 @@ public:
 
     void setFrame(const QImage &frame);
 
+    bool laserOn() const { return m_laserOn; }
+
     Q_INVOKABLE void warpMouse(int x, int y);
-    Q_INVOKABLE void sendAimDelta(float dx, float dy, bool laserOn);
+    Q_INVOKABLE void sendAimDelta(float dx, float dy);
     Q_INVOKABLE void sendCommand(int cmd);
+    Q_INVOKABLE void resetPosition();
+    Q_INVOKABLE void toggleLaser();
 
 signals:
-    void aimDeltaReceived(float dx, float dy, bool laserOn);
+    void aimDeltaReceived(float pan, float tilt, float pan_vel, float tilt_vel, bool laserOn);
     void commandReceived(int cmd);
     void logRequested(const QString &msg);
+    void laserOnChanged();
 
 private:
     ImageProvider *m_imageProvider = nullptr;
+    float m_panPos = 0.0f;
+    float m_tiltPos = 0.0f;
+    bool m_laserOn = false;
 };
 
 #endif

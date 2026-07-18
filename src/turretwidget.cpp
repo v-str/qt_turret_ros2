@@ -64,13 +64,36 @@ void TurretWidget::warpMouse(int x, int y)
     QCursor::setPos(mapToGlobal(QPoint(x, y)));
 }
 
-void TurretWidget::sendAimDelta(float dx, float dy, bool laserOn)
+void TurretWidget::sendAimDelta(float dx, float dy)
 {
-    emit aimDeltaReceived(dx, dy, laserOn);
+    float pan_vel = dx * combat::speedMultiplier;
+    float tilt_vel = dy * combat::speedMultiplier;
+    m_panPos = qBound(-1.0f, m_panPos + pan_vel, 1.0f);
+    m_tiltPos = qBound(-1.0f, m_tiltPos + tilt_vel, 1.0f);
+    emit aimDeltaReceived(m_panPos, m_tiltPos, pan_vel, tilt_vel, m_laserOn);
     emit logRequested(
-        QString("Прицеливание: pan_vel=%1, tilt_vel=%2")
-            .arg(dx * combat::speedMultiplier, 0, 'f', 3)
-            .arg(dy * combat::speedMultiplier, 0, 'f', 3));
+        QString("Прицеливание: pan=%1, tilt=%2, pan_vel=%3, tilt_vel=%4")
+            .arg(m_panPos, 0, 'f', 3)
+            .arg(m_tiltPos, 0, 'f', 3)
+            .arg(pan_vel, 0, 'f', 3)
+            .arg(tilt_vel, 0, 'f', 3));
+}
+
+void TurretWidget::toggleLaser()
+{
+    m_laserOn = !m_laserOn;
+    emit laserOnChanged();
+    emit logRequested(QString("Лазер %1").arg(m_laserOn ? "включён" : "выключен"));
+}
+
+void TurretWidget::resetPosition()
+{
+    m_panPos = 0.0f;
+    m_tiltPos = 0.0f;
+    if (m_laserOn)
+        toggleLaser();
+    emit aimDeltaReceived(0, 0, 0, 0, false);
+    emit logRequested("Центрирование: pan=0, tilt=0");
 }
 
 void TurretWidget::sendCommand(int cmd)
@@ -79,7 +102,7 @@ void TurretWidget::sendCommand(int cmd)
     switch (cmd) {
         case 0: emit logRequested("Ручное управление"); break;
         case 1: /* Патрулирование — заглушка */ break;
-        case 2: emit logRequested("Центрирование"); break;
+        case 2: resetPosition(); break;
     }
 }
 

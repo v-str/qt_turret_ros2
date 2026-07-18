@@ -45,14 +45,12 @@ void MainWindow::setRosWorker(QtRosWorker *worker)
             m_rosWorker, &QtRosWorker::publishCommand);
 
     connect(m_turretWidget, &TurretWidget::aimDeltaReceived,
-            this, [this](float dx, float dy, bool laser) {
-        float s = combat::speedMultiplier;
-        emit publishRequested(0, 0, dx * s, dy * s, laser);
+            this, [this](float pan, float tilt, float pan_vel, float tilt_vel, bool laser) {
+        emit publishRequested(pan, tilt, pan_vel, tilt_vel, laser);
     });
 
     connect(m_turretWidget, &TurretWidget::commandReceived,
-            this, [this](int cmd) {
-        if (cmd == 2)
-            emit publishRequested(0, 0, 0, 0, false);
+            this, [this](int /*cmd*/) {
+        // handled entirely in TurretWidget::sendCommand
     });
 }

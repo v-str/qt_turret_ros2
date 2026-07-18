@@ -37,7 +37,7 @@ Item {
             var dx = (mouse.x - cx) / cx
             var dy = (mouse.y - cy) / cy
             if (Math.abs(mouse.x - cx) > 1 || Math.abs(mouse.y - cy) > 1) {
-                turretWidget.sendAimDelta(dx, dy, combatToggle.checked)
+                turretWidget.sendAimDelta(dx, dy)
                 turretWidget.warpMouse(cx, cy)
             }
         }
@@ -64,7 +64,7 @@ Item {
             id: topBar
             Layout.fillWidth: true
             Layout.topMargin: 6
-            Layout.leftMargin: 6
+            Layout.leftMargin: 10
             spacing: 8
 
             Rectangle {
@@ -137,6 +137,7 @@ Item {
                     font.pixelSize: 13
                     color: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
                     horizontalAlignment: Text.AlignRight
+                    Layout.fillWidth: true
                 }
 
                 AppToggle {
@@ -148,8 +149,20 @@ Item {
                         } else {
                             flashAnim.stop()
                             flashRect.border.width = 0
+                            if (turretWidget.laserOn)
+                                turretWidget.toggleLaser()
                         }
                     }
+                }
+
+                AppLabel {
+                    id: laserLabel
+                    text: turretWidget ? (turretWidget.laserOn ? "Лазер включён" : "Лазер выключен") : ""
+                    font.pixelSize: 10
+                    color: turretWidget && turretWidget.laserOn ? "red" : SpaceMill.spaceTextMuted
+                    horizontalAlignment: Text.AlignRight
+                    Layout.fillWidth: true
+                    visible: combatToggle.checked
                 }
             }
         }
@@ -193,9 +206,9 @@ Item {
         id: logWidget
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-        anchors.leftMargin: 6
+        anchors.leftMargin: 10
         anchors.bottomMargin: 6
-        width: 150
+        width: 400
         height: 117
         z: 1000
     }
@@ -204,7 +217,15 @@ Item {
         id: exitShortcut
         sequence: "Ctrl+0"
         enabled: combatToggle.checked
-        onActivated: combatToggle.checked = false
+        onActivated: {
+            combatToggle.checked = false
+        }
+    }
+
+    Shortcut {
+        id: laserShortcut
+        sequence: "Ctrl+L"
+        onActivated: turretWidget.toggleLaser()
     }
 
     Connections {
