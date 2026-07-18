@@ -2,5 +2,10 @@
     <qresource prefix="/">
         <file>images/crosshair.png</file>
         <file>qml/turretwidget.qml</file>
+        <file>qml/Components/AppBtn.qml</file>
+        <file>qml/Components/AppLabel.qml</file>
+        <file>qml/Components/AppToggle.qml</file>
+        <file>qml/Components/LogWidget.qml</file>
+        <file>qml/Components/StatusDot.qml</file>
     </qresource>
 </RCC>

@@ -1,4 +1,5 @@
 #include "turretwidget.h"
+#include "constants.h"
 #include <QQuickWidget>
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -22,9 +23,14 @@ QImage ImageProvider::requestImage(const QString &, QSize *size, const QSize &)
 {
     QMutexLocker lock(&m_mutex);
     if (m_frame.isNull()) {
+        if (m_placeholder.isNull()) {
+            m_placeholder = QImage(camera::width, camera::height,
+                                   QImage::Format_RGB888);
+            m_placeholder.fill(Qt::black);
+        }
         if (size)
-            *size = QSize(1, 1);
-        return QImage(1, 1, QImage::Format_ARGB32);
+            *size = m_placeholder.size();
+        return m_placeholder;
     }
     if (size)
         *size = m_frame.size();
@@ -39,7 +45,10 @@ TurretWidget::TurretWidget(QWidget *parent)
     auto *quickWidget = new QQuickWidget(this);
     quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     quickWidget->engine()->addImageProvider("turret", m_imageProvider);
-    quickWidget->engine()->rootContext()->setContextProperty("imageProvider", m_imageProvider);
+
+    auto *ctx = quickWidget->engine()->rootContext();
+    ctx->setContextProperty("imageProvider", m_imageProvider);
+    ctx->setContextProperty("SpaceMill", theme::make());
 
     quickWidget->setSource(QUrl("qrc:/qml/turretwidget.qml"));
 

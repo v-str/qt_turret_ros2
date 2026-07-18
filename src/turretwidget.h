@@ -24,6 +24,7 @@ signals:
 
 private:
     QImage m_frame;
+    QImage m_placeholder;
     QMutex m_mutex;
     int m_counter = 0;
 };
