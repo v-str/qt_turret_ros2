@@ -3,6 +3,8 @@ import QtQuick.Layouts
 import "Components"
 
 Item {
+    id: rootItem
+
     Image {
         id: cameraImage
         anchors.fill: parent
@@ -11,6 +13,7 @@ Item {
     }
 
     Image {
+        id: crosshairImg
         source: combatToggle.checked
             ? "qrc:/images/crosshair.png"
             : "qrc:/images/crosshair_disabled.png"
@@ -23,6 +26,7 @@ Item {
     }
 
     MouseArea {
+        id: aimArea
         anchors.fill: parent
         enabled: combatToggle.checked
         hoverEnabled: true
@@ -36,6 +40,7 @@ Item {
     }
 
     Text {
+        id: exitHint
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 8
@@ -47,16 +52,19 @@ Item {
     }
 
     ColumnLayout {
+        id: mainLayout
         anchors.fill: parent
         spacing: 0
 
         RowLayout {
+            id: topBar
             Layout.fillWidth: true
             Layout.topMargin: 6
             Layout.leftMargin: 6
             spacing: 8
 
             Rectangle {
+                id: topBarBg
                 width: parent.width
                 height: parent.height
                 radius: 6
@@ -64,39 +72,63 @@ Item {
             }
 
             ColumnLayout {
+                id: btnColumn
                 Layout.alignment: Qt.AlignTop
                 spacing: 4
 
-                AppBtn {
-                    text: "Ручное управление"
-                    font.pixelSize: 13
-                    Layout.preferredWidth: 140
-                    Layout.minimumWidth: 140
-                    Layout.maximumWidth: 140
+                Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    color: SpaceMill.spaceElementAlpha
+                    radius: 5
                 }
 
                 AppBtn {
+                    id: manualBtn
+                    text: "Ручное управление"
+                    font.pixelSize: 13
+                    Layout.preferredWidth: 150
+                    Layout.minimumWidth: 150
+                    Layout.maximumWidth: 150
+                }
+
+                AppBtn {
+                    id: patrolBtn
                     text: "Патрулирование"
                     font.pixelSize: 13
-                    Layout.preferredWidth: 140
-                    Layout.minimumWidth: 140
-                    Layout.maximumWidth: 140
+                    Layout.preferredWidth: 150
+                    Layout.minimumWidth: 150
+                    Layout.maximumWidth: 150
+                    Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
+                }
+
+                AppBtn {
+                    id: centerBtn
+                    text: "Центрирование"
+                    font.pixelSize: 13
+                    Layout.preferredWidth: 150
+                    Layout.minimumWidth: 150
+                    Layout.maximumWidth: 150
+                    Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
                 }
             }
 
             Item {
+                id: topBarSpacer
                 Layout.fillWidth: true
             }
 
             ColumnLayout {
+                id: toggleColumn
                 Layout.alignment: Qt.AlignRight | Qt.AlignTop
                 Layout.rightMargin: 6
                 spacing: 2
 
                 AppLabel {
+                    id: combatLabel
                     text: "Боевой режим"
-                    font.pixelSize: 10
-                    color: SpaceMill.spaceTextMuted
+                    font.pixelSize: 13
+                    color: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
                     horizontalAlignment: Text.AlignRight
                 }
 
@@ -116,6 +148,7 @@ Item {
         }
 
         Item {
+            id: mainSpacer
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
@@ -150,22 +183,25 @@ Item {
     }
 
     LogWidget {
+        id: logWidget
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.leftMargin: 6
         anchors.bottomMargin: 6
-        width: 250
-        height: 350
+        width: 150
+        height: 117
         z: 1000
     }
 
     Shortcut {
+        id: exitShortcut
         sequence: "Ctrl+0"
         enabled: combatToggle.checked
         onActivated: combatToggle.checked = false
     }
 
     Timer {
+        id: frameTimer
         interval: 33
         running: true
         repeat: true
