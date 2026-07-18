@@ -11,7 +11,9 @@ Item {
     }
 
     Image {
-        source: "qrc:/images/crosshair.png"
+        source: combatToggle.checked
+            ? "qrc:/images/crosshair.png"
+            : "qrc:/images/crosshair_disabled.png"
         anchors.centerIn: parent
         width: 60
         height: 60
@@ -33,10 +35,16 @@ Item {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: 56
             Layout.topMargin: 6
             Layout.leftMargin: 6
             spacing: 8
+
+            Rectangle {
+                width: parent.width
+                height: parent.height
+                radius: 6
+                color: Qt.rgba(0.15, 0.15, 0.15, 0.25)
+            }
 
             ColumnLayout {
                 Layout.alignment: Qt.AlignTop
@@ -76,6 +84,7 @@ Item {
                 }
 
                 AppToggle {
+                    id: combatToggle
                     Layout.alignment: Qt.AlignRight
                 }
             }
@@ -86,12 +95,14 @@ Item {
             Layout.fillHeight: true
         }
 
-        LogWidget {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 100
-            Layout.leftMargin: 6
-            Layout.rightMargin: 6
-            Layout.bottomMargin: 6
-        }
+    }
+
+    LogWidget {
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 6
+        anchors.bottomMargin: 6
+        width: 250
+        height: 350
     }
 }
