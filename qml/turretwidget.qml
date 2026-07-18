@@ -29,8 +29,8 @@ Item {
         id: aimArea
         anchors.fill: parent
         enabled: combatToggle.checked
-        hoverEnabled: true
-        cursorShape: Qt.BlankCursor
+        hoverEnabled: combatToggle.checked
+        cursorShape: combatToggle.checked ? Qt.BlankCursor : Qt.ArrowCursor
         onPositionChanged: function(mouse) {
             var cx = width / 2
             var cy = height / 2
