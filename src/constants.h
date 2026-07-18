@@ -9,3 +9,11 @@ inline constexpr auto status_topic     = "/proto_turret_publisher";
 inline constexpr size_t qos_depth       = 10;
 
 } // namespace qt_turret
+
+namespace camera {
+inline constexpr int width      = 640;
+inline constexpr int height     = 480;
+inline constexpr int fpsMin     = 1;
+inline constexpr int fpsMax     = 120;
+inline constexpr int fpsDefault = 30;
+} // namespace camera
