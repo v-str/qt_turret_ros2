@@ -23,7 +23,7 @@ signals:
     void stateUpdated(float pan_pos, float tilt_pos, bool laser);
 
 private:
-    rclcpp::Node::SharedPtr node_;
+    rclcpp::Node::SharedPtr m_node;
     rclcpp::Publisher<proto_turret_interfaces::msg::TurretCommand>::SharedPtr publisher_;
     rclcpp::Subscription<proto_turret_interfaces::msg::TurretCommand>::SharedPtr subscriber_;
 };

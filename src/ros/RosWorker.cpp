@@ -14,20 +14,21 @@ RosWorker::~RosWorker()
 void RosWorker::start()
 {
     rclcpp::init(0, nullptr);
-    node_ = std::make_shared<rclcpp::Node>(qt_turret::node_name);
+    m_node = std::make_shared<rclcpp::Node>(qt_turret::node_name);
 
-    publisher_ = node_->create_publisher<proto_turret_interfaces::msg::TurretCommand>(
+    publisher_ = m_node->create_publisher<proto_turret_interfaces::msg::TurretCommand>(
         qt_turret::cmd_turret_topic, qt_turret::qos_depth);
 
-    subscriber_ = node_->create_subscription<proto_turret_interfaces::msg::TurretCommand>(
-        qt_turret::heartbeat_topic, qt_turret::qos_depth,
+    subscriber_ = m_node->create_subscription<proto_turret_interfaces::msg::TurretCommand>(
+        qt_turret::heartbeat_topic,
+        qt_turret::qos_depth,
         [this](const proto_turret_interfaces::msg::TurretCommand::SharedPtr msg) {
             emit stateUpdated(msg->pan_pos, msg->tilt_pos, msg->laser_enable);
         });
 
-    rclcpp::spin(node_);
+    rclcpp::spin(m_node);
 
-    node_.reset();
+    m_node.reset();
     emit finished();
 }
 
