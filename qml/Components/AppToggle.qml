@@ -15,7 +15,7 @@ Item {
         id: track
         anchors.fill: parent
         radius: height / 2
-        color: "transparent"
+        color: SpaceMill.spaceElementAlpha
         border.width: 1
         border.color: root.isEnabled
             ? (root.checked ? SpaceMill.spaceSuccess : SpaceMill.spaceTextMuted)

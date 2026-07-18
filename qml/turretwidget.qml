@@ -90,6 +90,7 @@ Item {
                     Layout.preferredWidth: 150
                     Layout.minimumWidth: 150
                     Layout.maximumWidth: 150
+                    Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
                 }
 
                 AppBtn {
