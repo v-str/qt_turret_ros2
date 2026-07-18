@@ -42,6 +42,7 @@ set(PROJECT_SOURCES
         mainwindow.ui
         src/ros/RosWorker.h
         src/ros/RosWorker.cpp
+        src/constants.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

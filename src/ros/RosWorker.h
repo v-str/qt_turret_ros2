@@ -26,8 +26,6 @@ private:
     rclcpp::Node::SharedPtr node_;
     rclcpp::Publisher<proto_turret_interfaces::msg::TurretCommand>::SharedPtr publisher_;
     rclcpp::Subscription<proto_turret_interfaces::msg::TurretCommand>::SharedPtr subscriber_;
-    std::shared_ptr<rclcpp::executors::SingleThreadedExecutor> executor_;
-    std::atomic<bool> running_;
 };
 
 #endif // ROSWORKER_H
