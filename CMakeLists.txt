@@ -56,6 +56,10 @@ set(PROJECT_SOURCES
         src/constants.h
         src/camera/CameraGrabber.h
         src/camera/CameraGrabber.cpp
+        src/turretwidget.h
+        src/turretwidget.cpp
+        src/turretwidget.ui
+        resources.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QImage>
 #include <QThread>
 #include "camera/CameraGrabber.h"
+#include "turretwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,11 +17,8 @@ public:
 public slots:
     void onFrameCaptured(const QImage &frame);
 
-protected:
-    void paintEvent(QPaintEvent *event) override;
-
 private:
-    QImage m_lastFrame;
+    TurretWidget *m_turretWidget;
     CameraGrabber *m_cameraGrabber;
     QThread *m_cameraThread;
 };
