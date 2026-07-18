@@ -237,7 +237,7 @@ Item {
 
     Connections {
         target: turretWidget
-        function onLogRequested(msg) { logWidget.appendLog(msg) }
+        function onLogRequested(msg, type) { logWidget.appendLog(msg, type) }
     }
 
     Timer {

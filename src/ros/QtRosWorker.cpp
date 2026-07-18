@@ -1,4 +1,5 @@
 #include "QtRosWorker.h"
+#include "constants.h"
 
 QtRosWorker::QtRosWorker(QObject *parent)
     : QObject(parent)
@@ -17,7 +18,13 @@ void QtRosWorker::start()
         // TODO: queue for main thread when we add status display
     });
 
-    m_handler->init();
+    try {
+        m_handler->init();
+        emit statusMessage("Турель подключена", LogType::Success);
+    } catch (const std::exception &e) {
+        emit statusMessage(QString("Ошибка ROS: %1").arg(e.what()), LogType::Error);
+        return;
+    }
 
     m_running = true;
     m_rosThread = std::thread(&QtRosWorker::rosLoop, this);

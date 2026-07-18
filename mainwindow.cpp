@@ -17,6 +17,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(m_cameraGrabber, &CameraGrabber::frameCaptured,
             this, &MainWindow::onFrameCaptured);
+    connect(m_cameraGrabber, &CameraGrabber::cameraOpened,
+            this, [this](bool ok) {
+        if (ok)
+            emit m_turretWidget->logRequested("Камера подключена", LogType::Success);
+        else
+            emit m_turretWidget->logRequested("Ошибка камеры: не удалось открыть", LogType::Error);
+    });
     connect(m_cameraThread, &QThread::started, m_cameraGrabber, [this]() {
         m_cameraGrabber->start();
     });
@@ -52,5 +59,10 @@ void MainWindow::setRosWorker(QtRosWorker *worker)
     connect(m_turretWidget, &TurretWidget::commandReceived,
             this, [this](int /*cmd*/) {
         // handled entirely in TurretWidget::sendCommand
+    });
+
+    connect(m_rosWorker, &QtRosWorker::statusMessage,
+            this, [this](const QString &msg, int type) {
+        emit m_turretWidget->logRequested(msg, type);
     });
 }

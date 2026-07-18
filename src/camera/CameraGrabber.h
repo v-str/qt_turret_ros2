@@ -22,6 +22,7 @@ public slots:
 
 signals:
     void frameCaptured(const QImage &frame);
+    void cameraOpened(bool ok);
 
 private:
     void grabFrame();

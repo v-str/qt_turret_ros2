@@ -7,8 +7,8 @@ Item {
     property int logCount: 0
     property color accentColor: SpaceMill.spaceSuccess
 
-    function appendLog(msg) {
-        logModel.append({ text: msg })
+    function appendLog(msg, type) {
+        logModel.append({ text: msg, type: type })
         logCount++
         if (logCount > 100) {
             logModel.remove(0)
@@ -50,7 +50,14 @@ Item {
                 model: logModel
                 delegate: Text {
                     text: model.text
-                    color: SpaceMill.spaceText
+                    color: {
+                        switch (model.type) {
+                            case 1: return SpaceMill.spaceSuccess
+                            case 2: return "red"
+                            case 3: return SpaceMill.spaceTextMuted
+                            default: return SpaceMill.spaceText
+                        }
+                    }
                     font.pixelSize: 10
                     bottomPadding: 2
                 }

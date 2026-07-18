@@ -45,7 +45,7 @@ TurretWidget::TurretWidget(QWidget *parent)
 
     auto *quickWidget = new QQuickWidget(this);
     quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    quickWidget->engine()->addImageProvider("turret", m_imageProvider);
+    quickWidget->engine()->addImageProvider("turret", m_imageProvider); // ownership transfers to QQmlEngine
 
     auto *ctx = quickWidget->engine()->rootContext();
     ctx->setContextProperty("imageProvider", m_imageProvider);
@@ -75,14 +75,15 @@ void TurretWidget::sendAimDelta(float dx, float dy)
                           .arg(m_panPos, 0, 'f', 3)
                           .arg(m_tiltPos, 0, 'f', 3)
                           .arg(pan_vel, 0, 'f', 3)
-                          .arg(tilt_vel, 0, 'f', 3));
+                          .arg(tilt_vel, 0, 'f', 3),
+                      LogType::Tracking);
 }
 
 void TurretWidget::toggleLaser()
 {
     m_laserOn = !m_laserOn;
     emit laserOnChanged();
-    emit logRequested(QString("Лазер %1").arg(m_laserOn ? "включён" : "выключен"));
+    emit logRequested(QString("Лазер %1").arg(m_laserOn ? "включён" : "выключен"), LogType::Success);
 }
 
 void TurretWidget::resetPosition()
@@ -92,14 +93,14 @@ void TurretWidget::resetPosition()
     if (m_laserOn)
         toggleLaser();
     emit aimDeltaReceived(0, 0, 0, 0, false);
-    emit logRequested("Центрирование: pan=0, tilt=0");
+    emit logRequested("Центрирование: pan=0, tilt=0", LogType::Success);
 }
 
 void TurretWidget::sendCommand(int cmd)
 {
     emit commandReceived(cmd);
     switch (cmd) {
-        case 0: emit logRequested("Ручное управление"); break;
+        case 0: emit logRequested("Ручное управление", LogType::Success); break;
         case 1: /* Патрулирование — заглушка */ break;
         case 2: resetPosition(); break;
     }
@@ -107,7 +108,7 @@ void TurretWidget::sendCommand(int cmd)
 
 TurretWidget::~TurretWidget()
 {
-    delete m_imageProvider;
+    // m_imageProvider is owned and deleted by QQmlEngine
 }
 
 void TurretWidget::setFrame(const QImage &frame)

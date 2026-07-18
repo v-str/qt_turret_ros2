@@ -30,6 +30,10 @@ namespace combat {
 inline constexpr float speedMultiplier = 0.3f;
 } // namespace combat
 
+struct LogType {
+    enum { Info = 0, Success = 1, Error = 2, Tracking = 3 };
+};
+
 namespace theme {
 inline QVariantMap make() {
     QVariantMap m;

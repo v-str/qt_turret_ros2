@@ -14,11 +14,15 @@ CameraGrabber::~CameraGrabber()
 
 void CameraGrabber::start(int deviceId)
 {
-    if (m_cap.isOpened())
+    if (m_cap.isOpened()) {
+        emit cameraOpened(true);
         return;
+    }
 
-    if (!m_cap.open(deviceId, cv::CAP_V4L2))
+    if (!m_cap.open(deviceId, cv::CAP_V4L2)) {
+        emit cameraOpened(false);
         return;
+    }
 
     m_cap.set(cv::CAP_PROP_FRAME_WIDTH, camera::width);
     m_cap.set(cv::CAP_PROP_FRAME_HEIGHT, camera::height);
@@ -27,6 +31,7 @@ void CameraGrabber::start(int deviceId)
     m_timer->setTimerType(Qt::CoarseTimer);
     connect(m_timer, &QTimer::timeout, this, &CameraGrabber::grabFrame);
     m_timer->start(1000 / m_fps);
+    emit cameraOpened(true);
 }
 
 void CameraGrabber::stop()

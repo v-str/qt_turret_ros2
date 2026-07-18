@@ -22,7 +22,7 @@ public slots:
     void publishCommand(float pan, float tilt, float pan_vel, float tilt_vel, bool laser);
 
 signals:
-    void statusUpdated(float pan_pos, float tilt_pos, bool laser);
+    void statusMessage(const QString &msg, int type);
     void finished();
 
 private:

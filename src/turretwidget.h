@@ -52,7 +52,7 @@ public:
 signals:
     void aimDeltaReceived(float pan, float tilt, float pan_vel, float tilt_vel, bool laserOn);
     void commandReceived(int cmd);
-    void logRequested(const QString &msg);
+    void logRequested(const QString &msg, int type);
     void laserOnChanged();
 
 private:
