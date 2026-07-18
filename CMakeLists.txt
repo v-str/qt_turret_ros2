@@ -6,17 +6,42 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(ProcessorCount)
+ProcessorCount(NCPUS)
+if(NCPUS GREATER 0)
+    set(CMAKE_BUILD_PARALLEL_LEVEL ${NCPUS})
+    set(ENV{MAKEFLAGS} "-j${NCPUS}")
+endif()
+
+list(APPEND CMAKE_PREFIX_PATH
+    /opt/ros/lyrical
+    $ENV{HOME}/Ros2/ros2_ws/install
+)
+set(ENV{AMENT_PREFIX_PATH} "/opt/ros/lyrical:$ENV{HOME}/Ros2/ros2_ws/install")
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
+    OUTPUT_VARIABLE _py_ver
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+set(ENV{PYTHONPATH} "/opt/ros/lyrical/lib/python${_py_ver}/site-packages:$ENV{PYTHONPATH}")
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_package_templates")
+find_package(rclcpp REQUIRED)
+find_package(proto_turret_interfaces REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        src/ros/RosWorker.h
+        src/ros/RosWorker.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -42,7 +67,12 @@ else()
     endif()
 endif()
 
-target_link_libraries(qt_turret_ros2 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_include_directories(qt_turret_ros2 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_link_libraries(qt_turret_ros2 PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    rclcpp::rclcpp
+    proto_turret_interfaces::proto_turret_interfaces
+)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
