@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     ros_worker.moveToThread(&ros_thread);
 
     MainWindow w;
+    w.setRosWorker(&ros_worker);
 
     QObject::connect(&ros_thread, &QThread::started,
                      &ros_worker, &QtRosWorker::start);

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "constants.h"
+#include "ros/QtRosWorker.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,4 +35,24 @@ MainWindow::~MainWindow()
 void MainWindow::onFrameCaptured(const QImage &frame)
 {
     m_turretWidget->setFrame(frame);
+}
+
+void MainWindow::setRosWorker(QtRosWorker *worker)
+{
+    m_rosWorker = worker;
+
+    connect(this, &MainWindow::publishRequested,
+            m_rosWorker, &QtRosWorker::publishCommand);
+
+    connect(m_turretWidget, &TurretWidget::aimDeltaReceived,
+            this, [this](float dx, float dy, bool laser) {
+        float s = combat::speedMultiplier;
+        emit publishRequested(0, 0, dx * s, dy * s, laser);
+    });
+
+    connect(m_turretWidget, &TurretWidget::commandReceived,
+            this, [this](int cmd) {
+        if (cmd == 2)
+            emit publishRequested(0, 0, 0, 0, false);
+    });
 }

@@ -41,6 +41,13 @@ public:
     void setFrame(const QImage &frame);
 
     Q_INVOKABLE void warpMouse(int x, int y);
+    Q_INVOKABLE void sendAimDelta(float dx, float dy, bool laserOn);
+    Q_INVOKABLE void sendCommand(int cmd);
+
+signals:
+    void aimDeltaReceived(float dx, float dy, bool laserOn);
+    void commandReceived(int cmd);
+    void logRequested(const QString &msg);
 
 private:
     ImageProvider *m_imageProvider = nullptr;

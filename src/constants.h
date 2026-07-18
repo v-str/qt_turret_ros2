@@ -26,6 +26,10 @@ inline constexpr int fpsMax = 120;
 inline constexpr int fpsDefault = 30;
 } // namespace camera
 
+namespace combat {
+inline constexpr float speedMultiplier = 0.3f;
+} // namespace combat
+
 namespace theme {
 inline QVariantMap make() {
     QVariantMap m;

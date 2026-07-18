@@ -34,8 +34,12 @@ Item {
         onPositionChanged: function(mouse) {
             var cx = width / 2
             var cy = height / 2
-            if (Math.abs(mouse.x - cx) > 1 || Math.abs(mouse.y - cy) > 1)
+            var dx = (mouse.x - cx) / cx
+            var dy = (mouse.y - cy) / cy
+            if (Math.abs(mouse.x - cx) > 1 || Math.abs(mouse.y - cy) > 1) {
+                turretWidget.sendAimDelta(dx, dy, combatToggle.checked)
                 turretWidget.warpMouse(cx, cy)
+            }
         }
     }
 
@@ -91,6 +95,7 @@ Item {
                     Layout.minimumWidth: 150
                     Layout.maximumWidth: 150
                     Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
+                    onClicked: turretWidget.sendCommand(0)
                 }
 
                 AppBtn {
@@ -111,6 +116,7 @@ Item {
                     Layout.minimumWidth: 150
                     Layout.maximumWidth: 150
                     Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
+                    onClicked: turretWidget.sendCommand(2)
                 }
             }
 
@@ -199,6 +205,11 @@ Item {
         sequence: "Ctrl+0"
         enabled: combatToggle.checked
         onActivated: combatToggle.checked = false
+    }
+
+    Connections {
+        target: turretWidget
+        function onLogRequested(msg) { logWidget.appendLog(msg) }
     }
 
     Timer {

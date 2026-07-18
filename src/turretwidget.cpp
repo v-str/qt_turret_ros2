@@ -64,6 +64,25 @@ void TurretWidget::warpMouse(int x, int y)
     QCursor::setPos(mapToGlobal(QPoint(x, y)));
 }
 
+void TurretWidget::sendAimDelta(float dx, float dy, bool laserOn)
+{
+    emit aimDeltaReceived(dx, dy, laserOn);
+    emit logRequested(
+        QString("Прицеливание: pan_vel=%1, tilt_vel=%2")
+            .arg(dx * combat::speedMultiplier, 0, 'f', 3)
+            .arg(dy * combat::speedMultiplier, 0, 'f', 3));
+}
+
+void TurretWidget::sendCommand(int cmd)
+{
+    emit commandReceived(cmd);
+    switch (cmd) {
+        case 0: emit logRequested("Ручное управление"); break;
+        case 1: /* Патрулирование — заглушка */ break;
+        case 2: emit logRequested("Центрирование"); break;
+    }
+}
+
 TurretWidget::~TurretWidget()
 {
     delete m_imageProvider;
