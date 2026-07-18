@@ -40,8 +40,10 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        src/ros/RosWorker.h
-        src/ros/RosWorker.cpp
+        src/ros/RosHandler.h
+        src/ros/RosHandler.cpp
+        src/ros/QtRosWorker.h
+        src/ros/QtRosWorker.cpp
         src/constants.h
 )
 

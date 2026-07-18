@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "ros/RosWorker.h"
+#include "ros/QtRosWorker.h"
 
 #include <QApplication>
 #include <QThread>
@@ -9,16 +9,13 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QThread ros_thread;
-    RosWorker ros_worker;
+    QtRosWorker ros_worker;
     ros_worker.moveToThread(&ros_thread);
 
     MainWindow w;
 
     QObject::connect(&ros_thread, &QThread::started,
-                     &ros_worker, &RosWorker::start);
-
-    QObject::connect(&ros_worker, &RosWorker::finished,
-                     &ros_thread, &QThread::quit);
+                     &ros_worker, &QtRosWorker::start);
 
     ros_thread.start();
     w.show();
