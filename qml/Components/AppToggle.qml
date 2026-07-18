@@ -1,7 +1,7 @@
 import QtQuick
 
 Item {
-    id: root
+    id: toggleRoot
     implicitWidth: 60
     implicitHeight: 30
 
@@ -9,8 +9,10 @@ Item {
     property bool checked: false
     property bool isEnabled: true
     property color activeColor: SpaceMill.spaceSuccess
+    property bool blocked: false
 
     signal toggled(bool checked)
+    signal blockedClicked()
 
     Rectangle {
         id: track
@@ -18,8 +20,8 @@ Item {
         radius: height / 2
         color: SpaceMill.spaceElementAlpha
         border.width: 1
-        border.color: root.isEnabled
-            ? (root.checked ? root.activeColor : SpaceMill.spaceTextMuted)
+        border.color: toggleRoot.isEnabled
+            ? (toggleRoot.checked ? toggleRoot.activeColor : SpaceMill.spaceTextMuted)
             : SpaceMill.spaceTextMuted
     }
 
@@ -29,8 +31,8 @@ Item {
         height: width
         radius: width / 2
         y: 3
-        x: root.checked ? parent.width - width - 3 : 3
-        color: root.isEnabled
+        x: toggleRoot.checked ? parent.width - width - 3 : 3
+        color: toggleRoot.isEnabled
             ? SpaceMill.spaceText
             : SpaceMill.spaceTextMuted
 
@@ -42,9 +44,13 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            if (root.isEnabled) {
-                root.checked = !root.checked
-                root.toggled(root.checked)
+            if (toggleRoot.isEnabled) {
+                if (toggleRoot.blocked) {
+                    toggleRoot.blockedClicked()
+                } else {
+                    toggleRoot.checked = !toggleRoot.checked
+                    toggleRoot.toggled(toggleRoot.checked)
+                }
             }
         }
     }

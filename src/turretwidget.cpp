@@ -84,6 +84,7 @@ void TurretWidget::toggleLaser()
     m_laserOn = !m_laserOn;
     emit laserOnChanged();
     emit logRequested(QString("Лазер %1").arg(m_laserOn ? "включён" : "выключен"), LogType::Success);
+    emit aimDeltaReceived(m_panPos, m_tiltPos, 0, 0, m_laserOn);
 }
 
 void TurretWidget::resetPosition()
@@ -109,6 +110,34 @@ void TurretWidget::sendCommand(int cmd)
 TurretWidget::~TurretWidget()
 {
     // m_imageProvider is owned and deleted by QQmlEngine
+}
+
+void TurretWidget::setCameraError(bool v)
+{
+    if (m_cameraError == v) return;
+    m_cameraError = v;
+    updateBlockedReason();
+    emit combatBlockedChanged();
+}
+
+void TurretWidget::setRosError(bool v)
+{
+    if (m_rosError == v) return;
+    m_rosError = v;
+    updateBlockedReason();
+    emit combatBlockedChanged();
+}
+
+void TurretWidget::updateBlockedReason()
+{
+    if (m_cameraError && m_rosError)
+        m_blockedReason = "Ошибка камеры и ROS";
+    else if (m_cameraError)
+        m_blockedReason = "Ошибка камеры";
+    else if (m_rosError)
+        m_blockedReason = "Ошибка ROS";
+    else
+        m_blockedReason.clear();
 }
 
 void TurretWidget::setFrame(const QImage &frame)

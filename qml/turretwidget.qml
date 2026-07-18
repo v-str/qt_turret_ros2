@@ -149,6 +149,9 @@ Item {
                     id: combatToggle
                     Layout.alignment: Qt.AlignRight
                     activeColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
+                    blocked: turretWidget.combatBlocked
+                    onBlockedClicked: turretWidget.logRequested(
+                        "Перевод в боевой режим невозможен: " + turretWidget.combatBlockedReason, 2)
                     onCheckedChanged: {
                         if (checked) {
                             flashAnim.start()
@@ -238,6 +241,10 @@ Item {
     Connections {
         target: turretWidget
         function onLogRequested(msg, type) { logWidget.appendLog(msg, type) }
+        function onCombatBlockedChanged() {
+            if (turretWidget.combatBlocked)
+                combatToggle.checked = false
+        }
     }
 
     Timer {

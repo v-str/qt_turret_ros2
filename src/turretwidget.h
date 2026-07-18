@@ -34,6 +34,8 @@ class TurretWidget : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(bool laserOn READ laserOn NOTIFY laserOnChanged)
+    Q_PROPERTY(bool combatBlocked READ combatBlocked NOTIFY combatBlockedChanged)
+    Q_PROPERTY(QString combatBlockedReason READ combatBlockedReason NOTIFY combatBlockedChanged)
 
 public:
     explicit TurretWidget(QWidget *parent = nullptr);
@@ -42,6 +44,11 @@ public:
     void setFrame(const QImage &frame);
 
     bool laserOn() const { return m_laserOn; }
+    bool combatBlocked() const { return m_cameraError || m_rosError; }
+    QString combatBlockedReason() const { return m_blockedReason; }
+
+    void setCameraError(bool v);
+    void setRosError(bool v);
 
     Q_INVOKABLE void warpMouse(int x, int y);
     Q_INVOKABLE void sendAimDelta(float dx, float dy);
@@ -54,12 +61,17 @@ signals:
     void commandReceived(int cmd);
     void logRequested(const QString &msg, int type);
     void laserOnChanged();
+    void combatBlockedChanged();
 
 private:
+    void updateBlockedReason();
     ImageProvider *m_imageProvider = nullptr;
     float m_panPos = 0.0f;
     float m_tiltPos = 0.0f;
     bool m_laserOn = false;
+    bool m_cameraError = false;
+    bool m_rosError = false;
+    QString m_blockedReason;
 };
 
 #endif
