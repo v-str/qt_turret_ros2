@@ -30,7 +30,7 @@ Item {
 
         Label {
             text: "Лог"
-            color: root.accentColor
+            color: accentColor
             font.pixelSize: 13
         }
 
