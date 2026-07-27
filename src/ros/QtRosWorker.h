@@ -26,6 +26,7 @@ signals:
     void finished();
 
 private:
+    void findStm32Port();
     void rosLoop();
 
     std::unique_ptr<RosHandler> m_handler;

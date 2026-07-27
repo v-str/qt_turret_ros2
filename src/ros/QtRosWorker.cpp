@@ -1,6 +1,8 @@
 #include "QtRosWorker.h"
 #include "constants.h"
 
+#include "QSerialPortInfo"
+
 QtRosWorker::QtRosWorker(QObject *parent)
     : QObject(parent)
 {
@@ -19,10 +21,11 @@ void QtRosWorker::start()
     });
 
     try {
+        findStm32Port();
         m_handler->init();
         emit statusMessage("Турель подключена", LogType::Success);
     } catch (const std::exception &e) {
-        emit statusMessage(QString("Ошибка ROS: %1").arg(e.what()), LogType::Error);
+        emit statusMessage(QString("Ошибка: %1").arg(e.what()), LogType::Error);
         return;
     }
 
@@ -52,4 +55,16 @@ void QtRosWorker::publishCommand(float pan, float tilt, float pan_vel, float til
 {
     if (m_handler)
         m_handler->publishCommand(pan, tilt, pan_vel, tilt_vel, laser);
+}
+
+void QtRosWorker::findStm32Port()
+{
+    for (const auto &info : QSerialPortInfo::availablePorts()) {
+        if (info.vendorIdentifier() == qt_turret::stm32_vid) {
+            if (info.productIdentifier() == qt_turret::stm32_pid) {
+                return;
+            }
+        }
+    }
+    throw std::runtime_error("не найдена плата stm32");
 }

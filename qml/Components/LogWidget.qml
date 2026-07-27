@@ -54,7 +54,7 @@ Item {
                         switch (model.type) {
                             case 1: return SpaceMill.spaceSuccess
                             case 2: return "red"
-                            case 3: return SpaceMill.spaceTextMuted
+                            case 3: return SpaceMill.spaceWarning
                             default: return SpaceMill.spaceText
                         }
                     }

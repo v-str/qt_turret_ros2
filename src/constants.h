@@ -10,6 +10,10 @@ inline constexpr auto cmd_turret_topic = "/proto_turret_cmd";
 inline constexpr auto status_topic = "/proto_turret_stm32_publisher";
 inline constexpr size_t qos_depth = 10;
 
+// vid/pid для обнаружения платы stm32
+inline constexpr quint16 stm32_vid = 0x0483;
+inline constexpr quint16 stm32_pid = 0x374b;
+
 } // namespace qt_turret
 
 namespace ui {
@@ -27,7 +31,7 @@ inline constexpr int fpsDefault = 30;
 } // namespace camera
 
 namespace combat {
-inline constexpr float speedMultiplier = 0.3f;
+inline constexpr float speedMultiplier = 5.0f;
 } // namespace combat
 
 struct LogType {

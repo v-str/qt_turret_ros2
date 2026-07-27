@@ -25,7 +25,7 @@ public:
     void setStatusCallback(StatusCallback cb);
 
 private:
-    Node::SharedPtr  m_node;
+    Node::SharedPtr m_node;
     Pub              m_publisher;
     Sub              m_subscriber;
     StatusCallback   m_onStatus;
