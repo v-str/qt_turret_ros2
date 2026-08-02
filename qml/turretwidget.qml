@@ -5,6 +5,7 @@ import "Components"
 Item {
     id: rootItem
 
+    // фон — камера
     Image {
         id: cameraImage
         anchors.fill: parent
@@ -12,6 +13,14 @@ Item {
         fillMode: Image.PreserveAspectFit
     }
 
+    // виньетка-подложка поверх кадра
+    Rectangle {
+        anchors.fill: parent
+        color: Qt.rgba(0.02, 0.04, 0.07, 0.35)
+    }
+
+    // обрамляющие угловые скобки экрана
+    // прицел (не меняем)
     Image {
         id: crosshairImg
         source: combatToggle.checked
@@ -25,6 +34,7 @@ Item {
         fillMode: Image.PreserveAspectFit
     }
 
+    // зона прицеливания
     MouseArea {
         id: aimArea
         anchors.fill: parent
@@ -47,108 +57,96 @@ Item {
         id: exitHint
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 8
-        text: "Ctrl+0 — откл. боевой режим\nCtrl+L — вкл. целеуказатель"
-        color: "red"
-        font.pixelSize: 14
+        anchors.topMargin: 10
+        text: "CTRL+0 — ОТКЛ. БОЕВОЙ РЕЖИМ\nCTRL+L — ЛАЗЕР"
+        color: SpaceMill.err
+        font.family: "Source Code Pro"
+        font.pixelSize: 12
+        font.letterSpacing: 1
         visible: combatToggle.checked
     }
 
-    ColumnLayout {
-        id: mainLayout
-        anchors.fill: parent
-        spacing: 0
+    // -------- верхняя панель управления --------
+    RowLayout {
+        anchors.top: parent.top
+        anchors.topMargin: 8
+        anchors.left: parent.left
+        anchors.leftMargin: 12
+        anchors.right: parent.right
+        anchors.rightMargin: 12
+        spacing: 10
 
-        RowLayout {
-            id: topBar
+        // левая стойка кнопок
+        ColumnLayout {
+            spacing: 6
+            Layout.alignment: Qt.AlignTop
+
+            AppBtn {
+                id: manualBtn
+                text: "Ручное управление"
+                frameColor: combatToggle.checked ? SpaceMill.err : SpaceMill.accent
+                textColor: combatToggle.checked ? SpaceMill.err : SpaceMill.accent
+                Layout.preferredWidth: 210
+                Layout.minimumWidth: 210
+                Layout.maximumWidth: 210
+                onClicked: turretWidget.sendCommand(0)
+            }
+
+            AppBtn {
+                id: patrolBtn
+                text: "Патрулирование"
+                frameColor: combatToggle.checked ? SpaceMill.err : SpaceMill.accent
+                textColor: combatToggle.checked ? SpaceMill.err : SpaceMill.accent
+                Layout.preferredWidth: 210
+                Layout.minimumWidth: 210
+                Layout.maximumWidth: 210
+            }
+
+            AppBtn {
+                id: calibrateBtn
+                text: "Калибровка"
+                frameColor: combatToggle.checked ? SpaceMill.err : SpaceMill.accent
+                textColor: combatToggle.checked ? SpaceMill.err : SpaceMill.accent
+                Layout.preferredWidth: 210
+                Layout.minimumWidth: 210
+                Layout.maximumWidth: 210
+                onClicked: turretWidget.sendCommand(2)
+            }
+        }
+
+        Item {
             Layout.fillWidth: true
-            Layout.topMargin: 6
-            Layout.leftMargin: 10
-            spacing: 8
+        }
 
-            Rectangle {
-                id: topBarBg
-                width: parent.width
-                height: parent.height
-                radius: 6
-                color: Qt.rgba(0.15, 0.15, 0.15, 0.25)
+        // правый статусный модуль боевого режима
+        Item {
+            Layout.alignment: Qt.AlignRight | Qt.AlignTop
+            Layout.preferredWidth: 200
+            Layout.preferredHeight: combatToggle.checked ? 88 : 70
+
+            Chamfer {
+                anchors.fill: parent
+                cut: 8
+                fillColor: Qt.rgba(0.04, 0.07, 0.11, 0.66)
+                borderColor: combatToggle.checked ? SpaceMill.err : SpaceMill.edgeBright
+                borderWidth: 1
             }
 
-            ColumnLayout {
-                id: btnColumn
-                Layout.alignment: Qt.AlignTop
-                spacing: 4
-
-                Rectangle {
-                    width: parent.width
-                    height: parent.height
-                    color: SpaceMill.spaceElementAlpha
-                    radius: 5
-                }
-
-                AppBtn {
-                    id: manualBtn
-                    text: "Ручное управление"
-                    font.pixelSize: 13
-                    Layout.preferredWidth: 150
-                    Layout.minimumWidth: 150
-                    Layout.maximumWidth: 150
-                    frameColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
-                    textColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
-                    Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
-                    onClicked: turretWidget.sendCommand(0)
-                }
-
-                AppBtn {
-                    id: patrolBtn
-                    text: "Патрулирование"
-                    font.pixelSize: 13
-                    Layout.preferredWidth: 150
-                    Layout.minimumWidth: 150
-                    Layout.maximumWidth: 150
-                    frameColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
-                    textColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
-                    Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
-                }
-
-                AppBtn {
-                    id: calibrateBtn
-                    text: "Калибровка"
-                    font.pixelSize: 13
-                    Layout.preferredWidth: 150
-                    Layout.minimumWidth: 150
-                    Layout.maximumWidth: 150
-                    frameColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
-                    textColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
-                    Component.onCompleted: background.color = SpaceMill.spaceElementAlpha
-                    onClicked: turretWidget.sendCommand(2)
-                }
-            }
-
-            Item {
-                id: topBarSpacer
-                Layout.fillWidth: true
-            }
-
-            ColumnLayout {
-                id: toggleColumn
-                Layout.alignment: Qt.AlignRight | Qt.AlignTop
-                Layout.rightMargin: 6
-                spacing: 2
+            Column {
+                anchors.fill: parent
+                anchors.leftMargin: 12
+                anchors.topMargin: 8
+                spacing: 6
 
                 AppLabel {
-                    id: combatLabel
                     text: "Боевой режим"
-                    font.pixelSize: 13
-                    color: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
-                    horizontalAlignment: Text.AlignRight
-                    Layout.fillWidth: true
+                    header: true
+                    color: combatToggle.checked ? SpaceMill.err : SpaceMill.textDim
                 }
 
                 AppToggle {
                     id: combatToggle
-                    Layout.alignment: Qt.AlignRight
-                    activeColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
+                    activeColor: combatToggle.checked ? SpaceMill.err : SpaceMill.ok
                     blocked: turretWidget ? turretWidget.combatBlocked : false
                     onBlockedClicked: turretWidget.logRequested(
                         "Перевод в боевой режим невозможен: " + turretWidget.combatBlockedReason, 2)
@@ -165,31 +163,22 @@ Item {
                 }
 
                 AppLabel {
-                    id: laserLabel
-                    text: turretWidget ? (turretWidget.laserOn ? "Лазер включён" : "Лазер выключен") : ""
-                    font.pixelSize: 10
-                    color: turretWidget && turretWidget.laserOn ? "red" : SpaceMill.spaceTextMuted
-                    horizontalAlignment: Text.AlignRight
-                    Layout.fillWidth: true
+                    text: turretWidget ? (turretWidget.laserOn ? "Лазер активен" : "Лазер выключен") : ""
+                    color: turretWidget && turretWidget.laserOn ? SpaceMill.err : SpaceMill.textDim
                     visible: combatToggle.checked
                 }
             }
         }
-
-        Item {
-            id: mainSpacer
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
     }
 
+    // вспышка-рамка в боевом режиме
     Rectangle {
         id: flashRect
         anchors.fill: parent
         color: "transparent"
-        border.color: "red"
+        border.color: SpaceMill.err
         border.width: 0
-        radius: 4
+        radius: 2
         z: 999
 
         SequentialAnimation {
@@ -198,35 +187,37 @@ Item {
                 target: flashRect
                 property: "border.width"
                 from: 0
-                to: 6
+                to: 8
                 duration: 180
             }
             PropertyAnimation {
                 target: flashRect
                 property: "border.width"
-                from: 6
+                from: 8
                 to: 0
                 duration: 180
             }
         }
     }
 
+    // журнал
     LogWidget {
         id: logWidget
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-        anchors.leftMargin: 10
-        anchors.bottomMargin: 1
-        width: 380
-        height: 100
-        accentColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
+        anchors.leftMargin: 12
+        anchors.bottomMargin: 10
+        width: 360
+        height: 110
+        accentColor: combatToggle.checked ? SpaceMill.err : SpaceMill.ok
         z: 1000
     }
 
+    // турель (низ-право)
     Item {
         id: turretGroup
         anchors.right: parent.right
-        anchors.rightMargin: 8
+        anchors.rightMargin: 14
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
         width: 180
@@ -256,10 +247,11 @@ Item {
         }
     }
 
+    // шкала наклона слева от турели
     Item {
         id: angleGroup
         anchors.right: turretGroup.left
-        anchors.rightMargin: 8
+        anchors.rightMargin: 10
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
         width: 170
@@ -282,9 +274,8 @@ Item {
     Shortcut {
         id: exitShortcut
         sequence: "Ctrl+0"
-        enabled: combatToggle.checked
         onActivated: {
-            combatToggle.checked = false
+            combatToggle.checked = !combatToggle.checked
         }
     }
 
