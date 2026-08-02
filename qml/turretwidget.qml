@@ -112,8 +112,8 @@ Item {
                 }
 
                 AppBtn {
-                    id: centerBtn
-                    text: "Центрирование"
+                    id: calibrateBtn
+                    text: "Калибровка"
                     font.pixelSize: 13
                     Layout.preferredWidth: 150
                     Layout.minimumWidth: 150
@@ -221,6 +221,62 @@ Item {
         height: 100
         accentColor: combatToggle.checked ? "red" : SpaceMill.spaceSuccess
         z: 1000
+    }
+
+    Item {
+        id: turretGroup
+        anchors.right: parent.right
+        anchors.rightMargin: 8
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
+        width: 180
+        height: 162
+
+        Image {
+            anchors.fill: parent
+            source: "qrc:/images/turret_no_bg_base.png"
+            fillMode: Image.PreserveAspectCrop
+            transform: Rotation {
+                origin.x: turretGroup.width / 2
+                origin.y: turretGroup.height / 2
+                angle: -90
+            }
+        }
+
+        Image {
+            anchors.fill: parent
+            source: "qrc:/images/turret_no_bg_gun_kontur.png"
+            fillMode: Image.PreserveAspectCrop
+            x: -5
+            transform: Rotation {
+                origin.x: turretGroup.width / 2
+                origin.y: turretGroup.height / 2
+                angle: -270
+            }
+        }
+    }
+
+    Item {
+        id: angleGroup
+        anchors.right: turretGroup.left
+        anchors.rightMargin: 8
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
+        width: 170
+        height: 162
+
+        Image {
+            anchors.fill: parent
+            source: "qrc:/images/turret_no_bg_angle_plate.png"
+            fillMode: Image.PreserveAspectCrop
+        }
+
+        Image {
+            id: angleGunImage
+            anchors.fill: parent
+            source: "qrc:/images/turret_no_bg_angle_gun.png"
+            fillMode: Image.PreserveAspectCrop
+        }
     }
 
     Shortcut {

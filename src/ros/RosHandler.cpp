@@ -1,5 +1,7 @@
 #include "RosHandler.h"
 
+#include <chrono>
+
 #include "constants.h"
 
 RosHandler::~RosHandler()
@@ -29,7 +31,10 @@ void RosHandler::init() {
         });
 }
 
-void RosHandler::run() { m_executor->spin_some(); }
+void RosHandler::run()
+{
+    m_executor->spin_some(std::chrono::milliseconds(10));
+}
 
 void RosHandler::stop()
 {
