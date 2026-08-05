@@ -200,74 +200,101 @@ Item {
         }
     }
 
-    // журнал
-    LogWidget {
-        id: logWidget
+    // нижний док: логи | наклон | температура | поворот
+    Item {
+        id: dockPanel
         anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.leftMargin: 12
-        anchors.bottomMargin: 10
-        width: 360
-        height: 110
-        accentColor: combatToggle.checked ? SpaceMill.err : SpaceMill.ok
-        z: 1000
-    }
-
-    // турель (низ-право)
-    Item {
-        id: turretGroup
         anchors.right: parent.right
-        anchors.rightMargin: 14
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        width: 180
-        height: 162
+        height: 186
 
-        Image {
+        Chamfer {
             anchors.fill: parent
-            source: "qrc:/images/turret_no_bg_base.png"
-            fillMode: Image.PreserveAspectCrop
-            transform: Rotation {
-                origin.x: turretGroup.width / 2
-                origin.y: turretGroup.height / 2
-                angle: -90
+            cut: 8
+            fillColor: Qt.rgba(0.04, 0.07, 0.11, 0.55)
+            borderColor: SpaceMill.edgeBright
+            borderWidth: 1
+        }
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
+            anchors.topMargin: 10
+            anchors.bottomMargin: 8
+            spacing: 10
+
+            LogWidget {
+                id: logWidget
+                Layout.fillWidth: true
+                Layout.minimumWidth: 200
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignBottom
+                accentColor: combatToggle.checked ? SpaceMill.err : SpaceMill.ok
             }
-        }
 
-        Image {
-            anchors.fill: parent
-            source: "qrc:/images/turret_no_bg_gun_kontur.png"
-            fillMode: Image.PreserveAspectCrop
-            x: -5
-            transform: Rotation {
-                origin.x: turretGroup.width / 2
-                origin.y: turretGroup.height / 2
-                angle: -270
+            // температура ЭВМ
+            TemperatureWidget {
+                Layout.preferredWidth: 150
+                Layout.minimumWidth: 120
+                Layout.preferredHeight: 162
+                Layout.alignment: Qt.AlignBottom
+                Layout.fillHeight: true
             }
-        }
-    }
 
-    // шкала наклона слева от турели
-    Item {
-        id: angleGroup
-        anchors.right: turretGroup.left
-        anchors.rightMargin: 10
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        width: 170
-        height: 162
+            // шкала наклона
+            Item {
+                id: angleGroup
+                Layout.preferredWidth: 150
+                Layout.minimumWidth: 120
+                Layout.preferredHeight: 162
+                Layout.alignment: Qt.AlignBottom
 
-        Image {
-            anchors.fill: parent
-            source: "qrc:/images/turret_no_bg_angle_plate.png"
-            fillMode: Image.PreserveAspectCrop
-        }
+                Image {
+                    anchors.fill: parent
+                    source: "qrc:/images/turret_no_bg_angle_plate.png"
+                    fillMode: Image.PreserveAspectCrop
+                }
 
-        Image {
-            id: angleGunImage
-            anchors.fill: parent
-            source: "qrc:/images/turret_no_bg_angle_gun.png"
-            fillMode: Image.PreserveAspectCrop
+                Image {
+                    id: angleGunImage
+                    anchors.fill: parent
+                    source: "qrc:/images/turret_no_bg_angle_gun.png"
+                    fillMode: Image.PreserveAspectCrop
+                }
+            }
+
+            // турель по углу поворота
+            Item {
+                id: turretGroup
+                Layout.preferredWidth: 160
+                Layout.minimumWidth: 120
+                Layout.preferredHeight: 162
+                Layout.alignment: Qt.AlignBottom
+
+                Image {
+                    anchors.fill: parent
+                    source: "qrc:/images/turret_no_bg_base.png"
+                    fillMode: Image.PreserveAspectCrop
+                    transform: Rotation {
+                        origin.x: turretGroup.width / 2
+                        origin.y: turretGroup.height / 2
+                        angle: -90
+                    }
+                }
+
+                Image {
+                    anchors.fill: parent
+                    source: "qrc:/images/turret_no_bg_gun_kontur.png"
+                    fillMode: Image.PreserveAspectCrop
+                    x: -5
+                    transform: Rotation {
+                        origin.x: turretGroup.width / 2
+                        origin.y: turretGroup.height / 2
+                        angle: -270
+                    }
+                }
+            }
         }
     }
 
