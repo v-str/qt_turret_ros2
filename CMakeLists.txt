@@ -44,6 +44,7 @@ find_package(OpenCV REQUIRED COMPONENTS core imgproc videoio)
 # ROS2
 find_package(rclcpp REQUIRED)
 find_package(proto_turret_interfaces REQUIRED)
+find_package(std_msgs REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -82,6 +83,7 @@ target_link_libraries(qt_turret_ros2 PRIVATE
     ${OpenCV_LIBS}
     rclcpp::rclcpp
     proto_turret_interfaces::proto_turret_interfaces
+    std_msgs::std_msgs
 )
 
 # настройки бандла для macOS/iOS

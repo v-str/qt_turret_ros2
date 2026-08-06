@@ -29,6 +29,15 @@ void RosHandler::init() {
                 m_onStatus(msg->pan_pos, msg->tilt_pos, msg->laser_enable);
             }
         });
+
+    m_temperatureSub = m_node->create_subscription<std_msgs::msg::Float32>(
+        qt_turret::temperature_topic,
+        qt_turret::qos_depth,
+        [this](const std_msgs::msg::Float32::SharedPtr msg) {
+            if (m_onTemperature) {
+                m_onTemperature(msg->data);
+            }
+        });
 }
 
 void RosHandler::run()
@@ -43,6 +52,7 @@ void RosHandler::stop()
     }
     m_publisher.reset();
     m_subscriber.reset();
+    m_temperatureSub.reset();
     m_node.reset();
 }
 
@@ -61,4 +71,9 @@ void RosHandler::publishCommand(float pan, float tilt, float pan_vel,
 void RosHandler::setStatusCallback(StatusCallback cb)
 {
     m_onStatus = std::move(cb);
+}
+
+void RosHandler::setTemperatureCallback(TemperatureCallback cb)
+{
+    m_onTemperature = std::move(cb);
 }

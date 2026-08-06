@@ -30,14 +30,14 @@ Item {
         spacing: 8
 
         AppLabel {
-            text: "Температура ЭВМ"
+            text: "Температура\nмодуля"
             header: true
             horizontalAlignment: Text.AlignHCenter
             Layout.fillWidth: true
         }
 
         Text {
-            text: tempWidget.temperatureC.toFixed(1) + " °C"
+            text: (turretWidget ? turretWidget.temperature : tempWidget.temperatureC).toFixed(1) + " °C"
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             font.family: "Source Code Pro"
@@ -46,25 +46,21 @@ Item {
             color: SpaceMill.accent
         }
 
-        Row {
+        AppLabel {
+            text: "вкл. обдув"
             Layout.alignment: Qt.AlignHCenter
-            spacing: 8
+            color: tempWidget.coolingActive ? SpaceMill.ok : SpaceMill.textDim
+        }
 
-            AppLabel {
-                text: "ОХЛ"
-                anchors.verticalCenter: parent.verticalCenter
-                color: tempWidget.coolingActive ? SpaceMill.ok : SpaceMill.textDim
-            }
-
-            AppToggle {
-                id: coolingToggle
-                activeColor: SpaceMill.ok
-                onToggled: function(checked) {
-                    tempWidget.coolingActive = checked
-                    turretWidget.logRequested(
-                        checked ? "Охлаждение включено" : "Охлаждение выключено",
-                        checked ? 1 : 0)
-                }
+        AppToggle {
+            id: coolingToggle
+            Layout.alignment: Qt.AlignHCenter
+            activeColor: SpaceMill.ok
+            onToggled: function(checked) {
+                tempWidget.coolingActive = checked
+                turretWidget.logRequested(
+                    checked ? "Охлаждение включено" : "Охлаждение выключено",
+                    checked ? 1 : 0)
             }
         }
     }

@@ -23,6 +23,7 @@ public slots:
 
 signals:
     void statusMessage(const QString &msg, int type);
+    void temperatureChanged(float temperature);
     void finished();
 
 private:

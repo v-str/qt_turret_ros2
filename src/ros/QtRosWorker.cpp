@@ -23,6 +23,9 @@ void QtRosWorker::start()
     try {
         findStm32Port();
         m_handler->init();
+        m_handler->setTemperatureCallback([this](float t) {
+            emit temperatureChanged(t);
+        });
         emit statusMessage("Турель подключена", LogType::Success);
     } catch (const std::exception &e) {
         emit statusMessage(QString("Ошибка: %1").arg(e.what()), LogType::Error);

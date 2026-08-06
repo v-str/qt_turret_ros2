@@ -144,3 +144,10 @@ void TurretWidget::setFrame(const QImage &frame)
 {
     m_imageProvider->setFrame(frame);
 }
+
+void TurretWidget::setTemperature(float t)
+{
+    if (m_temperature == t) return;
+    m_temperature = t;
+    emit temperatureChanged(m_temperature);
+}

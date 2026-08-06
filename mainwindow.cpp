@@ -72,4 +72,7 @@ void MainWindow::setRosWorker(QtRosWorker *worker)
         else if (type == LogType::Success && msg.contains("Турель подключена"))
             m_turretWidget->setRosError(false);
     });
+
+    connect(m_rosWorker, &QtRosWorker::temperatureChanged,
+            m_turretWidget, &TurretWidget::setTemperature);
 }

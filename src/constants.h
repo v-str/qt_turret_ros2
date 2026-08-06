@@ -8,6 +8,7 @@ namespace qt_turret {
 inline constexpr auto node_name = "proto_turret_qt_node";
 inline constexpr auto cmd_turret_topic = "/proto_turret_cmd";
 inline constexpr auto status_topic = "/proto_turret_stm32_publisher";
+inline constexpr auto temperature_topic = "/proto_turret_stm32_temperature";
 inline constexpr size_t qos_depth = 10;
 
 // vid/pid для обнаружения платы stm32
