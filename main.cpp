@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ros/QtRosWorker.h"
+#include "commanddata.h"
 
 #include <QApplication>
 #include <QFont>
@@ -8,6 +9,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    qRegisterMetaType<CommandData>();
     QFont appFont("Source Code Pro", 14, QFont::Light);
     a.setFont(appFont);
 

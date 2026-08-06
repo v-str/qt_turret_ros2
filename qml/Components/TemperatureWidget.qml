@@ -1,16 +1,15 @@
 import QtQuick
 import QtQuick.Layouts
 
-// Панель температуры ЭВМ + тумблер охлаждения.
-// C++ позже: сигналы температуры подключить к setTemperature(),
-// охлаждение — читать coolingActive.
+// Панель температуры ЭВМ + тумблер обдува.
+// Температура читается из turretWidget.temperature,
+// обдув — turretWidget.toggleFan().
 Item {
     id: tempWidget
     implicitWidth: 170
     implicitHeight: 162
 
     property real temperatureC: 0
-    property bool coolingActive: false
 
     function setTemperature(v) {
         temperatureC = v
@@ -49,7 +48,7 @@ Item {
         AppLabel {
             text: "вкл. обдув"
             Layout.alignment: Qt.AlignHCenter
-            color: tempWidget.coolingActive ? SpaceMill.ok : SpaceMill.textDim
+            color: turretWidget && turretWidget.fanOn ? SpaceMill.ok : SpaceMill.textDim
         }
 
         AppToggle {
@@ -57,10 +56,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             activeColor: SpaceMill.ok
             onToggled: function(checked) {
-                tempWidget.coolingActive = checked
-                turretWidget.logRequested(
-                    checked ? "Охлаждение включено" : "Охлаждение выключено",
-                    checked ? 1 : 0)
+                turretWidget.toggleFan()
             }
         }
     }

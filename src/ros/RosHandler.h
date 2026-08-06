@@ -5,6 +5,7 @@
 #include <proto_turret_interfaces/msg/turret_command.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/float32.hpp>
+#include "commanddata.h"
 
 using TurretCommand = proto_turret_interfaces::msg::TurretCommand;
 using Node = rclcpp::Node;
@@ -24,7 +25,7 @@ public:
     void run();
     void stop();
 
-    void publishCommand(float pan, float tilt, float pan_vel, float tilt_vel, bool laser);
+    void publishCommand(const CommandData &cmd);
     void setStatusCallback(StatusCallback cb);
     void setTemperatureCallback(TemperatureCallback cb);
 

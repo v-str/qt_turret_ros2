@@ -70,7 +70,7 @@ void TurretWidget::sendAimDelta(float dx, float dy)
     float tilt_vel = dy * combat::speedMultiplier;
     m_panPos = qBound(-1.0f, m_panPos + pan_vel, 1.0f);
     m_tiltPos = qBound(-1.0f, m_tiltPos + tilt_vel, 1.0f);
-    emit aimDeltaReceived(m_panPos, m_tiltPos, pan_vel, tilt_vel, m_laserOn);
+    emit aimDeltaReceived(makeCommand(pan_vel, tilt_vel));
     emit logRequested(QString("pan=%1, tilt=%2, pan_vel=%3, tilt_vel=%4")
                           .arg(m_panPos, 0, 'f', 3)
                           .arg(m_tiltPos, 0, 'f', 3)
@@ -84,7 +84,15 @@ void TurretWidget::toggleLaser()
     m_laserOn = !m_laserOn;
     emit laserOnChanged();
     emit logRequested(QString("Лазер %1").arg(m_laserOn ? "включён" : "выключен"), LogType::Success);
-    emit aimDeltaReceived(m_panPos, m_tiltPos, 0, 0, m_laserOn);
+    emit aimDeltaReceived(makeCommand());
+}
+
+void TurretWidget::toggleFan()
+{
+    m_fanOn = !m_fanOn;
+    emit fanOnChanged();
+    emit logRequested(QString("Охлаждение %1").arg(m_fanOn ? "включено" : "выключено"), LogType::Success);
+    emit aimDeltaReceived(makeCommand());
 }
 
 void TurretWidget::resetPosition()
@@ -93,7 +101,7 @@ void TurretWidget::resetPosition()
     m_tiltPos = 0.0f;
     if (m_laserOn)
         toggleLaser();
-    emit aimDeltaReceived(0, 0, 0, 0, false);
+    emit aimDeltaReceived(makeCommand());
     emit logRequested("Центрирование: pan=0, tilt=0", LogType::Success);
 }
 
@@ -150,4 +158,9 @@ void TurretWidget::setTemperature(float t)
     if (m_temperature == t) return;
     m_temperature = t;
     emit temperatureChanged(m_temperature);
+}
+
+CommandData TurretWidget::makeCommand(float panVel, float tiltVel) const
+{
+    return { m_panPos, m_tiltPos, panVel, tiltVel, m_laserOn, m_fanOn };
 }

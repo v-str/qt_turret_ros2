@@ -5,6 +5,7 @@
 #include <QThread>
 #include "camera/CameraGrabber.h"
 #include "turretwidget.h"
+#include "commanddata.h"
 
 class QtRosWorker;
 
@@ -22,7 +23,7 @@ public slots:
     void onFrameCaptured(const QImage &frame);
 
 signals:
-    void publishRequested(float pan, float tilt, float pan_vel, float tilt_vel, bool laser);
+    void publishRequested(const CommandData &cmd);
 
 private:
     TurretWidget *m_turretWidget;

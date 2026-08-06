@@ -56,15 +56,15 @@ void RosHandler::stop()
     m_node.reset();
 }
 
-void RosHandler::publishCommand(float pan, float tilt, float pan_vel,
-                                float tilt_vel, bool laser) {
+void RosHandler::publishCommand(const CommandData &cmd) {
     if (!m_publisher) return;
     auto msg = TurretCommand();
-    msg.pan_pos = pan;
-    msg.tilt_pos = tilt;
-    msg.pan_vel = pan_vel;
-    msg.tilt_vel = tilt_vel;
-    msg.laser_enable = laser;
+    msg.pan_pos = cmd.pan;
+    msg.tilt_pos = cmd.tilt;
+    msg.pan_vel = cmd.panVel;
+    msg.tilt_vel = cmd.tiltVel;
+    msg.laser_enable = cmd.laserOn;
+    msg.fan_enable = cmd.fanOn;
     m_publisher->publish(msg);
 }
 

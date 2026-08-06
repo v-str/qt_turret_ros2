@@ -55,8 +55,8 @@ void MainWindow::setRosWorker(QtRosWorker *worker)
             m_rosWorker, &QtRosWorker::publishCommand);
 
     connect(m_turretWidget, &TurretWidget::aimDeltaReceived,
-            this, [this](float pan, float tilt, float pan_vel, float tilt_vel, bool laser) {
-        emit publishRequested(pan, tilt, pan_vel, tilt_vel, laser);
+            this, [this](const CommandData &cmd) {
+        emit publishRequested(cmd);
     });
 
     connect(m_turretWidget, &TurretWidget::commandReceived,

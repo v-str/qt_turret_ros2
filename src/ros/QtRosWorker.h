@@ -6,6 +6,7 @@
 #include <atomic>
 #include <memory>
 #include "RosHandler.h"
+#include "commanddata.h"
 
 class QtRosWorker : public QObject
 {
@@ -19,7 +20,7 @@ public:
 
 public slots:
     void start();
-    void publishCommand(float pan, float tilt, float pan_vel, float tilt_vel, bool laser);
+    void publishCommand(const CommandData &cmd);
 
 signals:
     void statusMessage(const QString &msg, int type);

@@ -54,10 +54,10 @@ void QtRosWorker::stop()
     emit finished();
 }
 
-void QtRosWorker::publishCommand(float pan, float tilt, float pan_vel, float tilt_vel, bool laser)
+void QtRosWorker::publishCommand(const CommandData &cmd)
 {
     if (m_handler)
-        m_handler->publishCommand(pan, tilt, pan_vel, tilt_vel, laser);
+        m_handler->publishCommand(cmd);
 }
 
 void QtRosWorker::findStm32Port()
